@@ -1,0 +1,88 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-header text-center">Job Upload</div>
+    <div class="card-body">
+      <form #f="ngForm" [formGroup]="data" (submit)="submit()">
+        <div class="form-group">
+          <label for="fullname">Fullname</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="fullname"
+            placeholder="Enter Your Fullname(Surname first)"
+            required
+          />
+          <div
+            *ngIf="fullname.invalid && (fullname.dirty || fullname.touched)"
+            class="alert alert-danger mt-1"
+          >
+            <div *ngIf="fullname.errors.required">
+              FullName is required.
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && f.title.errors }"
+            formControlName="email"
+            placeholder="Enter Email Address"
+            required
+            [pattern]="emailPattern"
+          />
+          <div
+            *ngIf="email.invalid && (email.dirty || email.touched)"
+            class="alert alert-danger mt-1"
+          >
+            <div *ngIf="email.errors.required">
+              Email is required.
+            </div>
+            <div *ngIf="email.errors.pattern">
+              Email pattern does not match
+            </div>
+          </div>
+        </div>
+
+        <div class="progress">
+          <div
+            class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+            role="progressbar"
+            [ngStyle]="{ 'width.%': uploadPercent }"
+            aria-valuenow="25"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            id="progress"
+          >
+            <span class="p-4" *ngIf="uploadPercent !== 100; else showComplete"
+              >waiting...</span
+            >
+            <ng-template #showComplete>
+              <span>Complete</span>
+            </ng-template>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="avatar" id="updateLoader">Upload Avatar</label>
+
+          <input
+            type="file"
+            class="form-control-file"
+            id="avatar"
+            (change)="uploadFile($event)"
+          />
+        </div>
+        <button
+          class="btn btn-primary btn-block btn-lg"
+          [disabled]="!data.valid && isComplete === false"
+          type="submit"
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
